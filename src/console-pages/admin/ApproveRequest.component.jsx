@@ -52,6 +52,28 @@ export function ApproveRequestComponent(){
         }
 
 
+    // Show empty state if no requests
+    if (!requests || requests.length === 0) {
+        return (
+            <div className="container mt-5">
+                <div className="row justify-content-center">
+                    <div className="col-md-8 col-lg-6">
+                        <div className="text-center py-5">
+                            <div className="mb-4">
+                                <i className="bi bi-inbox" style={{ fontSize: '5rem', color: '#6c757d' }}></i>
+                            </div>
+                            <h2 className="mb-3">No Requests Found</h2>
+                            <p className="text-muted mb-4">
+                                There are currently no borrow requests to review. 
+                                All requests have been processed or no requests have been submitted yet.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <>
                         <table className="table table-dark table-hover">

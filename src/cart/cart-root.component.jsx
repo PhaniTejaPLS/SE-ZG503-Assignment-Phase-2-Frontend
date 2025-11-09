@@ -113,6 +113,35 @@ export const CartComponent = () =>{
         return new Date(y, m - 1, d); // monthIndex is 0-based
     };
 
+    // Show empty state if cart is empty
+    if (!cartItems || cartItems.length === 0) {
+        return (
+            <div className="container mt-5">
+                <div className="row justify-content-center">
+                    <div className="col-md-8 col-lg-6">
+                        <div className="text-center py-5">
+                            <div className="mb-4">
+                                <i className="bi bi-cart-x" style={{ fontSize: '5rem', color: '#6c757d' }}></i>
+                            </div>
+                            <h2 className="mb-3">Your Cart is Empty</h2>
+                            <p className="text-muted mb-4">
+                                Looks like you haven't added any items to your cart yet. 
+                                Start browsing our equipment inventory to add items to your cart.
+                            </p>
+                            <button 
+                                className="btn btn-primary btn-lg"
+                                onClick={() => navigate('/home')}
+                            >
+                                <i className="bi bi-box-seam me-2"></i>
+                                Browse Equipment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return(
         <>
         <h2>Bill of Materials</h2>

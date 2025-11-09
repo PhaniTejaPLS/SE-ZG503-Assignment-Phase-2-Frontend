@@ -11,97 +11,106 @@ import { StudentRequestPageComponent } from "../console-pages/student/student-re
 import { AdminConsoleComponent } from "../console-pages/admin/AdminConsole.component.jsx";
 
 export const router = createBrowserRouter([
+    // Root layout route - all main application routes are nested here
     {
         path: "/",
         element: <RootLayout />,
         errorElement: <></>,
         children: [
+            // Redirect root path to home
             {
                 index: true,
                 element: <Navigate to="/home" replace />
             },
+
+            // Homepage route - protected for all authenticated users
             {
-                // path: "home",
-                // element: <HomepageRoot />
                 element: <ProtectedRoute allowedRoles={['admin', 'student', 'staff']} />,
                 children: [
-                    { path: "home", element: <HomepageRoot /> }            
+                    { path: "home", element: <HomepageRoot /> }
                 ]
             },
+
+            // Inventory routes - organized by category
             {
                 path: "inventory",
                 children: [
+                    // Labs inventory
                     {
-                        path:"labs",
-                        // element: <InventoryPageRoot tag="lab" />
+                        path: "labs",
                         element: <ProtectedRoute allowedRoles={['admin', 'student', 'staff']} />,
                         children: [
-                            { path:'', element: <InventoryPageRoot tag="lab" /> },
+                            { path: '', element: <InventoryPageRoot tag="lab" /> }
                         ]
                     },
+                    // Sports inventory
                     {
-                        path:"sports",
+                        path: "sports",
                         element: <ProtectedRoute allowedRoles={['admin', 'student', 'staff']} />,
                         children: [
-                            { path:'', element: <InventoryPageRoot tag="sports" /> },
+                            { path: '', element: <InventoryPageRoot tag="sports" /> }
                         ]
                     },
+                    // Electronics inventory
                     {
-                        path:"electronics",
+                        path: "electronics",
                         element: <ProtectedRoute allowedRoles={['admin', 'student', 'staff']} />,
                         children: [
-                            { path:'', element: <InventoryPageRoot tag="electronics" /> },
+                            { path: '', element: <InventoryPageRoot tag="electronics" /> }
                         ]
                     },
+                    // Music inventory
                     {
-                        path:"music",
+                        path: "music",
                         element: <ProtectedRoute allowedRoles={['admin', 'student', 'staff']} />,
                         children: [
-                            { path:'', element: <InventoryPageRoot tag="music" /> },
+                            { path: '', element: <InventoryPageRoot tag="music" /> }
                         ]
                     },
+                    // Furniture inventory
                     {
-                        path:"furniture",
+                        path: "furniture",
                         element: <ProtectedRoute allowedRoles={['admin', 'student', 'staff']} />,
                         children: [
-                            { path:'', element: <InventoryPageRoot tag="furniture" /> },
+                            { path: '', element: <InventoryPageRoot tag="furniture" /> }
                         ]
                     }
                 ]
             },
+
+            // Cart route - protected for all authenticated users
             {
                 path: "cart",
                 element: <ProtectedRoute allowedRoles={['admin', 'student', 'staff']} />,
-                        children: [
-                            { path: "", element: <CartComponent /> },
-                        ]
-            },
-            {
-                path:"student",
-                element: <ProtectedRoute allowedRoles={['admin','staff','student']} />,
-                children:[
-                    {
-                        path:"requests", element: <StudentRequestPageComponent />
-                    }
+                children: [
+                    { path: "", element: <CartComponent /> }
                 ]
             },
+
+            // Student routes - accessible to admin, staff, and students
             {
-                path:"admin",
+                path: "student",
+                element: <ProtectedRoute allowedRoles={['admin', 'staff', 'student']} />,
+                children: [
+                    { path: "requests", element: <StudentRequestPageComponent /> }
+                ]
+            },
+
+            // Admin routes - accessible only to admins
+            {
+                path: "admin",
                 element: <ProtectedRoute allowedRoles={['admin']} />,
-                children:[
-                    {
-                        path:"console/edit", element: <AdminConsoleComponent tag={'edit-inv'} />
-                    },
-                    {
-                        path:"console/request", element: <AdminConsoleComponent tag={'approve-req'} />
-                    }
+                children: [
+                    { path: "console/edit", element: <AdminConsoleComponent tag={'edit-inv'} /> },
+                    { path: "console/request", element: <AdminConsoleComponent tag={'approve-req'} /> }
                 ]
             }
-
         ]
-        
     },
+
+    // Login route - public, outside of root layout
     {
-        path: "/login", element: <LoginComponent />
-    },
+        path: "/login",
+        element: <LoginComponent />
+    }
 ])
