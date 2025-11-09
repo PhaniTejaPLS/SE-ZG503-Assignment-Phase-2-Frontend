@@ -60,7 +60,42 @@ export const CartComponent = () =>{
     }, [cartItems]);
 
 
+    const validateForm = () => {
+        if (!userRequest.items || userRequest.items.length === 0) {
+            alert('Please add items to your cart before submitting.');
+            return false;
+        }
+
+        const missingFields = [];
+        
+        userRequest.items.forEach((item, index) => {
+            const itemName = cartItems.find(c => c.id === item.equipmentId)?.name || `Item ${index + 1}`;
+            
+            if (!item.borrowDate) {
+                missingFields.push(`${itemName}: Borrow Date`);
+            }
+            if (!item.returnDate) {
+                missingFields.push(`${itemName}: Return Date`);
+            }
+            if (!item.quantity || item.quantity <= 0) {
+                missingFields.push(`${itemName}: Quantity Required`);
+            }
+        });
+
+        if (missingFields.length > 0) {
+            alert('Please fill in all required fields:\n\n' + missingFields.join('\n'));
+            return false;
+        }
+
+        return true;
+    };
+
     async function submitUserRequest() {
+        // Validate before submitting
+        if (!validateForm()) {
+            return;
+        }
+
         console.log('Submitting user request:', userRequest);
             borrowRequestService.submitBorrowRequest(userRequest)
                 .then((response) => {
@@ -112,8 +147,13 @@ export const CartComponent = () =>{
                                 <td>{cartItem.tag}</td>
                                 <td>{cartItem.condition}</td>
                                 <td>
-                                    <div class="mb-3 date-input">
-                                        <input type="date" className="form-control" id="requestDate" name="requestDate"
+                                    <div className="mb-3 date-input">
+                                        <input 
+                                            type="date" 
+                                            className="form-control" 
+                                            id={`requestDate-${cartItem.id}`} 
+                                            name="requestDate"
+                                            required
                                             onChange={
                                                 (e)=>{
                                                     const updatedBorrowDate = e.target.value;
@@ -131,8 +171,13 @@ export const CartComponent = () =>{
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="mb-3 date-input">
-                                        <input type="date" className="form-control" id="returnDate" name="returnDate"
+                                    <div className="mb-3 date-input">
+                                        <input 
+                                            type="date" 
+                                            className="form-control" 
+                                            id={`returnDate-${cartItem.id}`} 
+                                            name="returnDate"
+                                            required
                                             onChange={
                                                 (e)=>{
                                                     const updatedReturnDate = e.target.value;
@@ -150,11 +195,17 @@ export const CartComponent = () =>{
                                 </td>
                                 
                                 <td>
-                                    <div class="mb-3 qty-input">
-                                        <input type="number" className="form-control" id="quantity" name="quantity"
+                                    <div className="mb-3 qty-input">
+                                        <input 
+                                            type="number" 
+                                            className="form-control" 
+                                            id={`quantity-${cartItem.id}`} 
+                                            name="quantity"
+                                            min="1"
+                                            required
                                             onChange={
                                                 (e)=>{
-                                                    const updatedQuantity = e.target.value;
+                                                    const updatedQuantity = parseInt(e.target.value) || 0;
                                                     setUserRequest((prevRequest) => ({
                                                         ...prevRequest,
                                                         items: (prevRequest.items || []).map((item) =>
@@ -185,13 +236,18 @@ export const CartComponent = () =>{
 
         </table>
                 <div className='cart-submit'>
-                    <input class="btn btn-primary" type="submit" value="Submit"
-                            onClick={()=>{
-                                submitUserRequest();
+                    <input 
+                        className="btn btn-primary" 
+                        type="submit" 
+                        value="Submit"
+                        onClick={async (e)=>{
+                            e.preventDefault();
+                            if (validateForm()) {
+                                await submitUserRequest();
                                 navigate('/home');
-                            }}
-                    
-                    ></input>
+                            }
+                        }}
+                    />
                 </div>
 
         </div>

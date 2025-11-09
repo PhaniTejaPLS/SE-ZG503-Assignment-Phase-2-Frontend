@@ -61,15 +61,15 @@ return (
 
                     <div className="credential">
                         <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="University Email" required
+                            <label for="emailFormControlInput" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="emailFormControlInput" placeholder="University Email" required
                                 onChange={(e) => handleEmailInput(e)}
                             />
                         </div>
 
                         <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="exampleFormControlInput1" placeholder="Password" required 
+                            <label for="passwordFormControlInput1" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="passwordFormControlInput1" placeholder="Password" required 
                                 onChange={(e) => handlePasswordInput(e)}
                             />
                         </div>

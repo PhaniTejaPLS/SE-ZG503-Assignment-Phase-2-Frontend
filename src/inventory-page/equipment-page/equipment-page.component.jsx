@@ -53,6 +53,24 @@ export function EquipmentPage({ tag, title }) {
         })();
     };
 
+    const buildFilterParams = () => {
+        const params = {};
+        
+        if (searchTerm && searchTerm.trim() !== '') {
+            params.name = searchTerm;
+        }
+        
+        if (conditionFilter && conditionFilter !== 'all') {
+            params.condition = conditionFilter;
+        }
+        
+        if (rangeValue !== null && rangeValue !== undefined) {
+            params.availablequantity = rangeValue;
+        }
+        
+        return params;
+    };
+
     const useFilterBasedOnInput = (filterParams) => {
         (async () =>{
             try {
@@ -156,7 +174,7 @@ export function EquipmentPage({ tag, title }) {
                         </div>
 
                         <div className="col-auto">
-                            <button type="button" className="btn btn-outline-light mb-3" onClick={() => useFilterBasedOnInput({name:searchTerm, condition: conditionFilter, availablequantity: rangeValue})} >Apply</button>
+                            <button type="button" className="btn btn-outline-light mb-3" onClick={() => useFilterBasedOnInput(buildFilterParams())} >Apply</button>
                         </div>
                     </div>
                 </div>
